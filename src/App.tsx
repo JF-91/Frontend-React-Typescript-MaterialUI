@@ -1,17 +1,19 @@
 import { BrowserRouter } from "react-router-dom";
 import AppRouter from "./Router";
 import NotificationProvider from "./context/NotificationProvider";
+import { Suspense } from "react";
 
 function App() {
   return (
     <>
-    <NotificationProvider>
-      <BrowserRouter>
-        <AppRouter />
-      </BrowserRouter>
-    </NotificationProvider>
+      <NotificationProvider>
+        <BrowserRouter>
+          <Suspense fallback={"Cargando"}>
+            <AppRouter />
+          </Suspense>
+        </BrowserRouter>
+      </NotificationProvider>
     </>
-
   );
 }
 

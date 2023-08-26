@@ -8,6 +8,10 @@ import {
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { addToCardt } from "../../redux/slices/cartSlice";
+import { useEffect, useState } from "react";
+import { setItem } from "../../utils/localStorage";
 
 type CardProps = {
   image: string;
@@ -25,6 +29,27 @@ const CardComponent: React.FC<CardProps> = ({
   id,
 }) => {
   const navigate = useNavigate();
+
+  const [disabledBtn, setDisabledBtn] = useState<boolean>(false);
+
+  const dispatch = useAppDispatch();
+
+  const itemExist = useAppSelector((state)=>state.cartReducer)
+
+  useEffect(()=>{
+   setDisabledBtn(itemExist.some((item)=> item.id === id));
+   setItem('cart', itemExist)
+  },[itemExist, id])
+
+  const handleAddToCart = ()=>{
+    dispatch(addToCardt({
+      id,
+      name,
+      image,
+      info: status
+    }))
+  }
+  
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia component="img" height="194" image={image} alt={name} />
@@ -45,6 +70,16 @@ const CardComponent: React.FC<CardProps> = ({
           size="small"
         >
           Lear More
+        </Button>
+        <Button
+          onClick={handleAddToCart}
+          fullWidth
+          variant="outlined"
+          disabled={disabledBtn}
+
+          size="small"
+        >
+          Add store
         </Button>
       </CardActions>
     </Card>

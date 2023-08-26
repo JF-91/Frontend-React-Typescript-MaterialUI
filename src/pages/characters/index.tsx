@@ -33,6 +33,7 @@ const CharacterPage: React.FC = () => {
         if (character?.status === "Dead") {
           setIsAlive(false);
         }
+        
 
       })
       .catch((err) => console.log(err));
